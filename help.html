@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Help for viewing QAlbum photo albums</title>
+</head>
+
+<body>
+<h1>Help for viewing QAlbum photo albums</h1>
+
+<p>This album is generated with
+<a href="http://www.gnu.org/software/qexo/qalbum"><code>qalbum</code></a>.</p>
+It is intended that it work on all browsers,
+but it works best with modern browsers with CSS and JavaScript enabled.</p>
+
+<--Issues:
+Firefox:
+  Ok
+Chrome:
+  In non-slider mode, next and prev URLs end eith '#'.
+Opera:
+  In slider mode, hash does not get updated.
+Konquoror:
+  Changing style (medium/large/info) while in slider doesn't work.
+Konquoror/IE:
+  No automatic focus when entering slider mode.
+All (?):
+"native" in zoom input field zoom.
+-->
+
+<h2>Mouse actions</h2>
+<p>In addition to the obvious buttons (in yellow), some
+other useful mouse action are available:</p>
+<ul>
+<li>
+Clicking on the left-most 10% of the window moves to the previous picture,
+while clicking on the right-most 10% of the window moves to the next picture.
+These are useful when the buttons are hidden, or when viewing on a small screen, like a phone.
+<li>Clicking in the main area of the screen hides the various buttons
+and text, so you can see just the image.  Clicking again brings them back.
+This is equivalent to typing <code>h</code> (for <q>hide</q>) on the keyboard.
+<li>You can zoom in or out if you have a scroll mouse.
+<li>You can drag the image around (by pushing the mouse button, and then
+moving the mouse while keeping the mouse button pushed).  This is useful
+when the image is zoomed.
+</ul>
+
+<h2>Keyboard shortcuts</h2>
+
+<p>These keyboard shortcuts might be easier than clicking.
+(They only work if JavaScript is enabled.)
+
+<dl>
+ <dt>p</dt><dd>Go to the Previous image.</dd>
+ <dt>n</dt><dd>Go to the Next image.</dd>
+ <dt>u</dt><dd>Go Up to the index page.</dd>
+ <dt>l</dt><dd>Show the Large image.</dd>
+ <dt>i</dt><dd>Show the Information page.</dd>
+ <dt>m</dt><dd>Show the Medium (default) page.</dd>
+</dl>
+
+<h2>OBSOLETE information on picture styles</h2>
+
+<p>You can choose between different picture sizes and display styles
+using the Style selector.  (Some of the styles require JavaScript to
+be enabled.  If JavaScript is not available,
+you get buttons to choose between the Medium, Large, and Info styles.)
+
+<dl>
+  <dt>Medium</dt>
+  <dd>The default style shows a picture scaled to at most
+    740 pixels in either direction.
+    This is suitable for low-to-moderate bandwidth connections,
+    and should work for any display at least 800 pixels wide.</dd>
+  <dt>Large</dt>
+  <dd>This currently uses the original unscaled image,
+      so it is best for high-bandwidth connections and larger displays.
+    What with increasing camera resulations, in the future we might
+    need to add an extra <q>huge</q> size for originals.)</dd>
+   <dt>Information</dt>
+   <dd>This shows a small (thumbnail) image, but also shows
+     various <q>EXIF</q> information about the camera and the image.
+     It also has direct links to the image (<code>.jpg</code>) files,
+     and any outtake/alternative images.</dd>
+   <dt>Large, scaled</dt>
+   <dd>Uses the large image, and automatically scaled it to fit
+     the current window.
+     This means you don't have to scroll the picture if it doesn't fit.
+     It is very nice for fullscreen mode.
+     The initial navigation links and text may overlap the image,
+     depending on the relative image and window sizes.
+     Type <q><code>h</code></q> to hide the links and text;
+     another <q><code>h</code></q> brings them back.</dd>
+   <dt>Large, scaled, no text</dt>
+   <dd>Same as the previous style followed by typing <q><code>h</code></q>
+     to hide the links and text.
+     Type <q><code>h</code></q> brings them back.</dd>
+   <dt>Medium, scaled</dt>
+   <dd>Same as <q>Large, scaled</q>, but uses the medium image.
+     This downloads and displays much faster, but the pictures aren't
+     quite as nice-looking.
+   <dt>Medium, scaled, no text</dt>
+   <dd>Same as <q>Large, scaled, no text</q>, but uses the medium image.</dd>
+   <dt>Slider</dt>
+   <dd>On the left shows a scrollable frame with all the images,
+     while the rest of the window matches the medium image.
+     This makes it easy to navigate to the picture you want.</dd>
+</dd>
+</dl>
+
+</body>
+</html>
