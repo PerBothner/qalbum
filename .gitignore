@@ -1,2 +1,8 @@
 qalbum
 *.class
+*~
+qalbum*.jar
+metadata-extractor-*
+metadata-extractor.jar
+xmpcore.jar
+kawa.jar

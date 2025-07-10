@@ -9,12 +9,12 @@ QEXO = $(KAWA) --xquery
 QALBUM_PACKAGE_DIR = ../qalbum
 QALBUM_PACKAGE_ROOT = ..
 QALBUM_VERSION = 1.2
-#ExifExtractor_JAR = metadata-extractor-2.3.1.jar
+#ExifExtractor_JAR = metadata-extractor-2.1.1.jar
 #ExifExtractor_JAR = metadata-extractor-2.4.0-beta-1.jar
 ExifExtractor_JARS = metadata-extractor.jar:xmpcore.jar
-ExifExtractor_JARS = /home/bothner/Software/metadata-extractor/build/libs/metadata-extractor-2.1.1.jar
+#ExifExtractor_JARS = /home/bothner/Software/metadata-extractor/build/libs/metadata-extractor-2.1.1.jar
 
-all: qalbum qalbum-$(QALBUM_VERSION).jar qalbum-$(QALBUM_VERSION).tgz
+all: qalbum-$(QALBUM_VERSION).jar qalbum
 
 qalbum-$(QALBUM_VERSION).jar: \
   $(QALBUM_PACKAGE_DIR)/ImageInfo.class \
@@ -38,8 +38,6 @@ DIST_FILES = index.html Makefile qalbum-$(QALBUM_VERSION).jar \
   metadata-extractor.jar xmpcore.jar \
   qalbum.java ImageInfo.java PictureInfo.java create.java Thumbnail.java \
   pictures.xql qalbum.in qalbum picture.js group.js help.html jar-manifest README
-
-all: qalbum-$(QALBUM_VERSION).jar qalbum
 
 SampleUsage.class: SampleUsage.java
 	CLASSPATH=$(CLASSPATH) $(JAVAC) SampleUsage.java
@@ -69,10 +67,11 @@ $(QALBUM_PACKAGE_DIR)/SelectFiles.class: $(QALBUM_PACKAGE_DIR)/SelectFiles.java
 $(QALBUM_PACKAGE_DIR)/pictures.class: pictures.xql
 	scriptdir=`pwd`; \
 	CLASSPATH=$(CLASSPATH) \
-	$(JAVA) kawa.repl --target 6 --xquery --main -d .. -P qalbum. -C pictures.xql
+	$(JAVA) kawa.repl --xquery --main -d .. -P qalbum. -C pictures.xql
 
 qalbum: qalbum.in
 	sed -e 's/@QALBUM_VERSION@/$(QALBUM_VERSION)/g' \
+	  -e 's/@ExifExtractor_JARS@/$(ExifExtractor_JARS)/g' \
 	  -e 's/@KAWA_JAR@/kawa.jar/g' <qalbum.in >qalbum
 	chmod +x qalbum
 

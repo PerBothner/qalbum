@@ -10,6 +10,6 @@ then
   fi
 fi
 KAWA_JAR=${KAWA_JAR-${scriptdir}/@KAWA_JAR@}
-ExifExtractor_JAR=${ExifExtractor_JAR-$scriptdir/metadata-extractor-2.3.1.jar}
-exec $JAVA -cp $scriptdir/qalbum-@QALBUM_VERSION@.jar:${KAWA_JAR}:${ExifExtractor_JAR}:$scriptdir/.. qalbum.qalbum --scriptdir="$scriptdir" "$@"
+ExifExtractor_JARS=${ExifExtractor_JARS-`echo :@ExifExtractor_JARS@ | sed -e "s|:|:${scriptdir}/|g"`}
+exec $JAVA -cp $scriptdir/qalbum-@QALBUM_VERSION@.jar:${KAWA_JAR}:${ExifExtractor_JARS}:$scriptdir/.. qalbum.qalbum --scriptdir="$scriptdir" "$@"
 exit -1
