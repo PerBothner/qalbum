@@ -136,7 +136,7 @@ declare function local:raw-jpg-link($class, $description, $picinfo) {
  :   The "info" style show a thumbnail, plus EXIF information, plus links to
  :   the raw JPGs.  The "full" style is like "large" but auto-resizing.
  :)
-declare function local:picture($picinfo, $group, $name, $preamble, $text, $prevId, $nextId, $date, $style, $i, $count, $outtakes) {
+declare function local:picture($picinfo, $group, $name, $preamble, $text, $prevId, $nextId, $firstId, $lastId, $date, $style, $i, $count, $outtakes) {
 (: FIXME add documentheader and DO NOT EDIT comment :)
 <html>
   <head>
@@ -166,8 +166,8 @@ declare function local:picture($picinfo, $group, $name, $preamble, $text, $prevI
      : isn't "logical", but it makes the JavaScript code look nice. :) )}
     <script type="text/javascript">
       var thisId = "{$name}";
-      var nextId = "{$nextId}";
-      var prevId = "{$prevId}";
+      var nextId = "{if ($nextId) then $nextId else $firstId}";
+      var prevId = "{if ($prevId) then $prevId else $lastId}";
       var libdir = "{$libdir}";
       var hash = location.hash;
       var style_link = "{local:style-link($style)}";
@@ -366,11 +366,13 @@ declare function local:loop-pictures($group, $date, $i, $count, $style, $texts, 
         let $picinfo := item-at($picinfos, $i),
             $prevId := if ($i > 1) then PictureInfo:getLabel(item-at($picinfos, $i - 1)) else "",
             $nextId := if ($i < $count) then PictureInfo:getLabel(item-at($picinfos, $i + 1)) else "",
+            $firstId := PictureInfo:getLabel(item-at($picinfos, 1)),
+            $lastId := PictureInfo:getLabel(item-at($picinfos, $count)),
 	    $name := PictureInfo:getLabel($picinfo)
         return (
         write-to-if-changed(local:picture($picinfo, $group, $name,
 		    $texts, local:picture-text($cur),
-                    $prevId, $nextId, $date, $style, $i, $count, ()),
+                    $prevId, $nextId, $firstId, $lastId, $date, $style, $i, $count, ()),
                   resolve-uri(concat($name, local:style-link($style), ".html"), $pwd)),
         local:loop-pictures($group, $date, $i+1, $count, $style,
                       (), $unseen, $picinfos))
@@ -381,13 +383,15 @@ declare function local:loop-pictures($group, $date, $i, $count, $style, $texts, 
       else
         let $prevId := if ($i > 1) then PictureInfo:getLabel(item-at($picinfos, $i - 1)) else "",
             $nextId := if ($i < $count) then PictureInfo:getLabel(item-at($picinfos, $i + 1)) else "",
+            $firstId := PictureInfo:getLabel(item-at($picinfos, 1)),
+            $lastId := PictureInfo:getLabel(item-at($picinfos, $count)),
             $pdate := if ($cur/date) then $cur/date else $date,
             $picinfo := item-at($picinfos, $i),
 	    $name := PictureInfo:getLabel($picinfo)
         return (
         write-to-if-changed(local:picture($picinfo, $group, $name,
 		    $texts, local:picture-text($cur),
-                    $prevId, $nextId, $pdate, $style, $i, $count,
+                    $prevId, $nextId, $firstId, $lastId, $pdate, $style, $i, $count,
                     $cur/outtake),
                   resolve-uri(concat($name, local:style-link($style), ".html"), $pwd)),
          local:loop-pictures($group, $date, $i+1, $count, $style, (),  $rest, $picinfos))
