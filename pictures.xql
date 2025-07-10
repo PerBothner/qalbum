@@ -94,7 +94,7 @@ declare function local:make-title($picinfo, $group) {
 (: Create a 1-row navigation-bar: next, prev etc :)
 
 declare function local:nav-bar($name, $prevId, $nextId, $style) {
-  <div pstyle="{$style}"><span id="prev-button" class="button">{if ($prevId) then
+  <div id="preamble-buttons" pstyle="{$style}"><span id="prev-button" class="button">{if ($prevId) then
   <div><a id="prev-link" href="{$prevId}{local:style-link($style)}.html"><div>&lt;-<br/>Previous</div></a></div>
   else ()}</span>{(
     )}<span style="display: inline-block; width: 80%"><span id="up-button" class="button"><a class="button" id="up-link" href="index.html">Up to index</a></span>{

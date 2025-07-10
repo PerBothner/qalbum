@@ -4,6 +4,9 @@
 // hash - the hash used for next/previous.
 // style_link - one of "", "large", or "info" (matches filename)
 var hidePreamble = false;
+var slideShow = false;
+var slideShowTimeMillis = 4 * 1000;
+var slideShowTimeoutId = 0;
 var up_button_link, prev_button_link, next_button_link,
   zoom_input_field, slider_button_link;
 var hSize = 800, vSize = 600;
@@ -14,7 +17,7 @@ var imageMoved = false;
 var zoomInputFocused = false;
 var modCount = 0;
 var image; // set by OnLoad
-var preamble;
+var preamble, preambleButtons;
 var evCache = new Array();
 var startX, startY, origX, origY, deltaX, deltaY;
 var prevDiff = -1, prevCenterX = -1, prevCenterY = -1;;
@@ -36,9 +39,11 @@ function getHashParams(hash) {
   // Old: {medium,large}-scaled-only New: image-only
   m = /-only/.exec(hash);
   hidePreamble = m ? true : false;
+  let sl = /slide-show/.exec(hash) ? true : false;
+  if (sl != slideShow)
+    toggleSlideShow();
 }
 
-getHashParams(hash);
 var scaled = style_link != "info" && ! isNaN(zoomn);
 
 function UpdateNavigationSubHash() {
@@ -55,7 +60,11 @@ function UpdateLocationHash() {
     if (str!="") str = str + ",";
     str = str + "image-only";
   }
-  hash = str=="" ? "" : "#"+str; // hash to use for next/previous
+  if (slideShow) {
+    if (str!="") str = str + ",";
+    str = str + "slide-show";
+  }
+ hash = str=="" ? "" : "#"+str; // hash to use for next/previous
   if (zoom == "native") {
     hash = hash=="" ? "#" : hash + ",";
     hash = hash + "zoom=" + zoom;
@@ -238,10 +247,12 @@ function OnLoad() {
   registerOnClick(up_button_link.parentNode, stopPropagation);
   registerOnClick(slider_button_link.parentNode, stopPropagation);
   if (window.addEventListener)
-     window.addEventListener("hashchange", HashChanged, false);
+      window.addEventListener("hashchange", HashChanged, false);
+  preamble = document.getElementById("preamble");
+  preambleButtons = document.getElementById("preamble-buttons");
+  getHashParams(hash);
   UpdateNavigationSubHash();
   StyleFixLinks();
-  preamble = document.getElementById("preamble");
   if (style_link != "info")
     ScaledLoad();
   image.style.visibility = "visible";
@@ -540,6 +551,13 @@ function ScaledResize() {
   image.style.height = (scale * image.origheight) + "px";
 }
 
+function loadNext() {
+  if (top.slider)
+    top.slider.sliderSelectCurStyle(nextId);
+  else
+    location=nextId+style_link+".html"+hash;
+}
+
 function handler(e) {
   var event = e ? e : window.event;
   var key = event.keyCode ? event.keyCode : event.which;
@@ -556,11 +574,7 @@ function handler(e) {
       return true;
   }
   if (nextId && key == 110) { // 'n' key
-      if (top.slider) {
-        top.slider.sliderSelectCurStyle(nextId);
-        return false;
-      }
-      location=nextId+style_link+".html"+hash;
+      loadNext();
       return true;
   }
   if (key == 33) { // page-up
@@ -588,6 +602,10 @@ function handler(e) {
     toggleHidePreamble();
     return true;
   }
+  if (key == 97) { /* 'a' - auto/slideshow mode */
+    toggleSlideShow();
+    return true;
+  }
 }
 
 function toggleHidePreamble() {
@@ -595,6 +613,19 @@ function toggleHidePreamble() {
   preamble.style.visibility = hidePreamble ? "hidden" : "visible";
   UpdateLocationHash();
   StyleFixLinks();
+}
+
+function toggleSlideShow() {
+  if (slideShowTimeoutId) {
+    clearTimeout(slideShowTimeoutId);
+    slideShowTimeoutId = 0;
+  }
+  slideShow = !slideShow;
+  preambleButtons.style.display = slideShow ? "none" : "";
+  if (slideShow) {
+    slideShowTimeoutId = setTimeout(loadNext, slideShowTimeMillis);
+  }
+  UpdateLocationHash();
 }
 
 document.onkeydown = handler;
